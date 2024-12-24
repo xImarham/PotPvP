@@ -273,13 +273,27 @@ public final class DuelCommand {
     }
 
     private static TextComponent[] createInviteNotification(String sender) {
-        TextComponent firstPart=new TextComponent("(Accept)");
-        firstPart.setColor(net.md_5.bungee.api.ChatColor.GREEN);
-        ClickEvent.Action runCommand=ClickEvent.Action.RUN_COMMAND;
-        HoverEvent.Action showText=HoverEvent.Action.SHOW_TEXT;
+        TextComponent firstPart = new TextComponent("Click here or type ");
+        TextComponent commandPart = new TextComponent("/accept " + sender);
+        TextComponent secondPart = new TextComponent(" to accept the invite");
+
+        firstPart.setColor(net.md_5.bungee.api.ChatColor.DARK_PURPLE);
+        commandPart.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+        secondPart.setColor(net.md_5.bungee.api.ChatColor.DARK_PURPLE);
+
+        ClickEvent.Action runCommand = ClickEvent.Action.RUN_COMMAND;
+        HoverEvent.Action showText = HoverEvent.Action.SHOW_TEXT;
+
         firstPart.setClickEvent(new ClickEvent(runCommand, "/accept " + sender));
-        firstPart.setHoverEvent(new HoverEvent(showText, new BaseComponent[]{new TextComponent(ChatColor.GREEN + "Accept the duel")}));
-        return new TextComponent[]{firstPart};
+        firstPart.setHoverEvent(new HoverEvent(showText, new BaseComponent[] { new TextComponent(ChatColor.GREEN + "Click here to accept") }));
+
+        commandPart.setClickEvent(new ClickEvent(runCommand, "/accept " + sender));
+        commandPart.setHoverEvent(new HoverEvent(showText, new BaseComponent[] { new TextComponent(ChatColor.GREEN + "Click here to accept") }));
+
+        secondPart.setClickEvent(new ClickEvent(runCommand, "/accept " + sender));
+        secondPart.setHoverEvent(new HoverEvent(showText, new BaseComponent[] { new TextComponent(ChatColor.GREEN + "Click here to accept") }));
+
+        return new TextComponent[] { firstPart, commandPart, secondPart };
     }
 }
 

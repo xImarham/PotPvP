@@ -52,7 +52,7 @@ PARTY:
 
 DUEL:
   YOURSELF: "&cYou can't accept a duel from yourself!"
-  SEND-DUEL-PLAYER: "&b%player% &ehas sent you a &b%kit-display-name% &eduel."
+  SEND-DUEL-PLAYER: "&b%player% &ehas sent you a &b%kit-display-name% &eduel on &d%schematic-name%&e."
   SEND-DUEL-SUCCESSFULLY: "&eSuccessfully sent a &b%kit-display-name% &eduel invite to &b%player%&e."
   OTHER-PARTY-NO-RECEIVE: "&cYour party doesn't have a duel invite from %leader-name%'s party."
   DONT-HAVE-INVITE-DUEL: "&cYou don't have a duel invite from %player%."
