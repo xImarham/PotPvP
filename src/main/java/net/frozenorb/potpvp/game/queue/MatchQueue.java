@@ -112,11 +112,11 @@ public final class MatchQueue {
             if (ranked) {
                 EloHandler eloHandler = PotPvPSI.getInstance().getEloHandler();
 
-                teamAElo = ChatColor.GRAY.toString() + " (" + ChatColor.GREEN.toString() + eloHandler.getElo(teamA.getAliveMembers(), kitType) + " Elo" + ChatColor.GRAY.toString() + ")";
-                teamBElo = ChatColor.GRAY.toString() + " (" + ChatColor.GREEN.toString() + eloHandler.getElo(teamB.getAliveMembers(), kitType) + " Elo" + ChatColor.GRAY.toString() + ")";
+                teamAElo = " (" + eloHandler.getElo(teamA.getAliveMembers(), kitType) + " Elo)";
+                teamBElo = " (" + eloHandler.getElo(teamB.getAliveMembers(), kitType) + " Elo)";
             }
 
-            String foundStart = ChatColor.BOLD.toString() + ChatColor.YELLOW + "Match found!" + ChatColor.RESET + ChatColor.YELLOW + "Opponent: " + ChatColor.AQUA;
+            String foundStart = ChatColor.YELLOW.toString() + ChatColor.BOLD + "Match found!" + ChatColor.YELLOW + " Opponent: " + ChatColor.AQUA;
 
             teamA.messageAlive(foundStart + Joiner.on(", ").join(PatchedPlayerUtils.mapToNames(teamB.getAllMembers())) + teamBElo);
             teamB.messageAlive(foundStart + Joiner.on(", ").join(PatchedPlayerUtils.mapToNames(teamA.getAllMembers())) + teamAElo);

@@ -146,7 +146,6 @@ public final class Match {
         updateVisiblity.forEach(VisibilityUtils::updateVisibilityFlicker);
         Bukkit.getPluginManager().callEvent(new MatchCountdownStartEvent(this));
 
-        messageAll("");
         new BukkitRunnable() {
 
             int countdownTimeRemaining = 5;

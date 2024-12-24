@@ -97,7 +97,6 @@ public final class PostMatchInvHandler {
             if (player == null) {
                 return;
             }
-            player.sendMessage("");
             player.sendMessage(PostMatchInvLang.LINE);
             player.sendMessage(ChatColor.GOLD + "Post-Match Inventories " + ChatColor.GRAY + "(click name to view)");
 

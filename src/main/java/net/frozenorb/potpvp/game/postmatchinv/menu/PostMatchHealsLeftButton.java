@@ -34,7 +34,7 @@ final class PostMatchHealsLeftButton extends Button {
     public List<String> getDescription(Player player) {
         if (healingMethod == HealingMethod.POTIONS) {
             return ImmutableList.of(
-                ChatColor.YELLOW + " missed " + missedHeals + " pot" + (missedHeals == 1 ? "." : "s.")
+                ChatColor.YELLOW + player.getDisplayName() + " missed " + missedHeals + " pot" + (missedHeals == 1 ? "." : "s.")
             );
         } else {
             return ImmutableList.of();

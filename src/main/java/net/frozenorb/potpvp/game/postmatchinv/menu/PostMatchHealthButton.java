@@ -36,7 +36,7 @@ final class PostMatchHealthButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return getHealthColor(health).toString() + Math.floor(health * 2) / 2 + ChatColor.GRAY + " / " + ChatColor.GREEN + "10";
+        return getHealthColor(health).toString() + Math.floor(health * 2) / 2 + ChatColor.GRAY + " / " + ChatColor.GREEN + "10 ❤";
     }
 
     @Override
