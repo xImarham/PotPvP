@@ -146,7 +146,6 @@ public final class Match {
         updateVisiblity.forEach(VisibilityUtils::updateVisibilityFlicker);
         Bukkit.getPluginManager().callEvent(new MatchCountdownStartEvent(this));
 
-        messageAll(ChatColor.YELLOW + "The match starts in...");
         messageAll("");
         new BukkitRunnable() {
 
@@ -166,7 +165,7 @@ public final class Match {
                     playSoundAll(Sound.NOTE_PLING, 1F);
                 }
 
-                messageAll(ChatColor.RED.toString() + countdownTimeRemaining + "...");
+                messageAll(ChatColor.YELLOW.toString() + countdownTimeRemaining + "...");
                 countdownTimeRemaining--;
             }
 

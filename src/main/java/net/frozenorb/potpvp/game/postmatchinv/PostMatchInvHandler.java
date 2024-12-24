@@ -99,7 +99,7 @@ public final class PostMatchInvHandler {
             }
             player.sendMessage("");
             player.sendMessage(PostMatchInvLang.LINE);
-            player.sendMessage(ChatColor.YELLOW + "Post-Match Inventories " + ChatColor.GREEN + "(click name to view)");
+            player.sendMessage(ChatColor.GOLD + "Post-Match Inventories " + ChatColor.GRAY + "(click name to view)");
 
             for (Object line : lines) {
                 if (line instanceof TextComponent[]) {
