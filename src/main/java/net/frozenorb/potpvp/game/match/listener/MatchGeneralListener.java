@@ -286,14 +286,11 @@ public final class MatchGeneralListener implements Listener {
         String itemTypeName = itemType.name().toLowerCase();
         int heldSlot = player.getInventory().getHeldItemSlot();
 
-        // don't let players drop swords, axes, and bows in the first slot
-        if (PlayerUtils.hasOtherInventoryOpen(player) && heldSlot == 0 && (itemTypeName.contains("sword") || itemTypeName.contains("axe") || itemType == Material.BOW)) {
+        if (heldSlot == 0 && (itemTypeName.contains("sword") || itemTypeName.contains("axe") || itemType == Material.BOW)) {
             player.sendMessage(ChatColor.RED + "You can't drop that while you're holding it in slot 1.");
             event.setCancelled(true);
         }
 
-        // glass bottles and bowls are removed from inventories but
-        // don't spawn items on the ground
         if (itemType == Material.GLASS_BOTTLE || itemType == Material.BOWL) {
             event.getItemDrop().remove();
         }
@@ -325,4 +322,5 @@ public final class MatchGeneralListener implements Listener {
             //event.getPlayer().setItemInHand(null);
         }, 1L);
     }
+
 }
