@@ -35,7 +35,6 @@ import net.frozenorb.potpvp.game.queue.QueueHandler;
 import net.frozenorb.potpvp.game.tournament.TournamentHandler;
 import net.frozenorb.potpvp.integration.holograms.HologramsHandler;
 import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
-import net.frozenorb.potpvp.integration.tab.PotPvPLayoutProvider;
 import net.frozenorb.potpvp.kt.command.CommandHandler;
 import net.frozenorb.potpvp.kt.morpheus.Morpheus;
 import net.frozenorb.potpvp.kt.morpheus.game.GameListeners;
@@ -63,8 +62,6 @@ import net.frozenorb.potpvp.util.menu.ButtonListener;
 import net.frozenorb.potpvp.util.potpvp.PotPvPCache;
 import net.frozenorb.potpvp.util.scoreboard.Assemble;
 import net.frozenorb.potpvp.util.scoreboard.AssembleStyle;
-import net.frozenorb.potpvp.util.tablist.shared.TabHandler;
-import net.frozenorb.potpvp.util.tablist.versions.v1_8_R3.v1_8_R3TabAdapter;
 import net.frozenorb.potpvp.util.uuid.IUUIDCache;
 import net.frozenorb.potpvp.util.uuid.UUIDCache;
 import org.bukkit.Bukkit;
@@ -199,12 +196,6 @@ public final class PotPvPSI extends JavaPlugin {
         nametagEngine = new NametagEngine();
         nametagEngine.load();
         nametagEngine.registerProvider(new PotPvPNametagProvider());
-
-        if (getConfig().getBoolean("SETTINGS.TABLIST")) {
-            if (Bukkit.getVersion().contains("1.8")) {
-                new TabHandler(new v1_8_R3TabAdapter(), new PotPvPLayoutProvider(), this, 20L);
-            }
-        }
 
         if (this.getServer().getPluginManager().isPluginEnabled("HolographicDisplays")) {
             this.hologramsConfig = new ConfigFile(this, "holograms");
