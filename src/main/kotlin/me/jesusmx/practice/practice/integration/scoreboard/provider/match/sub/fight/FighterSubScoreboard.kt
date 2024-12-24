@@ -32,6 +32,7 @@ class FighterScoreboard : SubScoreboard<Match>() {
     private val pingVariable = PingVariable()
 
     override fun accept(player : Player, scores : MutableList<String>, match : Match) {
+        scores.add("&7&m---------------------")
         val teams = match.teams
         if (teams.size != 2) {
             return
@@ -72,6 +73,8 @@ class FighterScoreboard : SubScoreboard<Match>() {
         if (bardEnergyScore != null) {
             scores.add("&e&lBard Energy&7: &f$bardEnergyScore")
         }
+        scores.add("&blunar.gg")
+        scores.add("&7&m---------------------")
     }
 
     private fun render1v1MatchLines(scores: MutableList<String>, otherTeam: MatchTeam, player: Player, match: Match) {
@@ -115,7 +118,7 @@ class FighterScoreboard : SubScoreboard<Match>() {
         ourTeam: MatchTeam,
         otherTeam: MatchTeam,
         player: Player,
-        healingMethod: HealingMethod?
+        healingMethod: HealingMethod
     ) {
         var partnerUuid: UUID? = null
         for (teamMember in ourTeam.allMembers) {
@@ -171,7 +174,6 @@ class FighterScoreboard : SubScoreboard<Match>() {
         scores.add("&a&lTeam &f(" + ourTeam.aliveMembers.size + "/" + ourTeam.allMembers.size + ")")
         scores.addAll(this.renderTeamMemberOverviewLinesWithHearts(ourTeam))
         scores.add("&b")
-        scores.add("&c&lEnemies: &f" + otherTeam.aliveMembers.size + "/" + otherTeam.allMembers.size)
     }
 
     fun renderJumboMatchLines(scores: MutableList<String>, ourTeam: MatchTeam, otherTeam: MatchTeam) {
