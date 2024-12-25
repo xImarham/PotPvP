@@ -42,7 +42,7 @@ final class KitTypeButton extends Button {
         List<String> description = new ArrayList<>();
 
         if (kitType.isHidden() && !player.isOp()) {
-            description.add(ChatColor.GRAY + "Hidden from normal players");
+            description.add(ChatColor.GRAY + "Hidden Normally");
         }
 
         if (!descriptionLines.isEmpty()) {

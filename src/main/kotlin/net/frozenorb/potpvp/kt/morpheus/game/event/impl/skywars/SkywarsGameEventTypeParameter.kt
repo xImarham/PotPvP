@@ -152,7 +152,7 @@ object SkywarsGameEventTypeParameter : GameParameter {
             override fun getBlocks(tier: SkywarsGameEventLootTier): List<ItemStack> {
                 val toReturn = ArrayList<ItemStack>()
 
-                when (tier) {
+                9;when (tier) {
                     SkywarsGameEventLootTier.NORMAL -> {
                         toReturn.add(ItemStack(Material.WOOD, Random.nextInt(10) + 10))
                         toReturn.add(ItemStack(Material.COBBLESTONE, Random.nextInt(10) + 10))

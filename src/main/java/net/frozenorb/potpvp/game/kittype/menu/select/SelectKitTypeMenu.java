@@ -48,26 +48,32 @@ public final class SelectKitTypeMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
         int index = 0;
         Party party = PotPvPSI.getInstance().getPartyHandler().getParty(player);
+
+        KitType bard = KitType.byId("BARD_HCF");
+        KitType diamond = KitType.byId("DIAMOND_HCF");
+        KitType archer = KitType.byId("ARCHER_HCF");
+
         for (KitType kitType : KitType.getAllTypes()) {
             //pero que ponemos para que puedan ver o que?
             //A eso voy xd
-            if(kitType.isHidden() && !player.isOp()) {
+            if (kitType.isHidden() && !player.isOp()) {
                 continue;
             }
-            /*if (kitType.isHidden() && !player.isOp()) {
-                continue;
-            }*/
 
             if (kitType.equals(KitType.teamFight) && party == null) {
+                continue;
+            }
+
+            if (kitType.equals(bard) || kitType.equals(diamond) || kitType.equals(archer)) {
                 continue;
             }
 
             buttons.put(index++, new KitTypeButton(kitType, callback));
         }
 
-        /*if (party != null) {
+        if (party != null) {
             buttons.put(8, new KitTypeButton(KitType.teamFight, callback));
-        }*/
+        }
 
         return buttons;
     }

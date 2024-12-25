@@ -139,9 +139,9 @@ class FighterScoreboard : SubScoreboard<Match>() {
                 val healsColor =
                     if (heals > 20) ChatColor.GREEN else if (heals > 12) ChatColor.YELLOW else if (heals > 8) ChatColor.GOLD else if (heals > 3) ChatColor.RED else ChatColor.DARK_RED
                 namePrefix = "&a"
-                healthStr = healthColor.toString() + health + " *\u2764* " + ChatColor.GRAY
+                healthStr = healthColor.toString() + health + " ❤ "
                 healsStr =
-                    if (healingMethod != null) healsColor.toString() + heals + " " + (if (heals == 1) healingMethod.shortSingular else healingMethod.shortPlural) else ""
+                    if (healingMethod != null) ChatColor.GRAY.toString() + "| " + ChatColor.RESET + healsColor.toString() + heals + " " + (if (heals == 1) healingMethod.shortSingular else healingMethod.shortPlural) else ""
             } else {
                 namePrefix = "&7&m"
                 healthStr = "&4RIP"
