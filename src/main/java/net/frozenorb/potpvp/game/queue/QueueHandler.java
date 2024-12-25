@@ -102,7 +102,7 @@ public final class QueueHandler {
         queue.addToQueue(entry);
         soloQueueCache.put(player.getUniqueId(), entry);
 
-        player.sendMessage(String.format(JOIN_SOLO_MESSAGE, ranked ? "ranked" : "unranked", kitType.getColoredDisplayName()));
+        player.sendMessage(String.format(JOIN_SOLO_MESSAGE, ranked ? "Ranked" : "Unranked", kitType.getColoredDisplayName()));
         InventoryUtils.resetInventoryDelayed(player);
         return true;
     }
@@ -120,7 +120,7 @@ public final class QueueHandler {
         soloQueueCache.remove(player.getUniqueId());
 
         if (!silent) {
-            player.sendMessage(String.format(LEAVE_SOLO_MESSAGE, queue.isRanked() ? "ranked" : "unranked", queue.getKitType().getColoredDisplayName()));
+            player.sendMessage(String.format(LEAVE_SOLO_MESSAGE, queue.isRanked() ? "Ranked" : "Unranked", queue.getKitType().getColoredDisplayName()));
         }
 
         InventoryUtils.resetInventoryDelayed(player);
@@ -138,7 +138,7 @@ public final class QueueHandler {
         queue.addToQueue(entry);
         partyQueueCache.put(party, entry);
 
-        party.message(String.format(JOIN_PARTY_MESSAGE, ranked ? "ranked" : "unranked", kitType.getColoredDisplayName()));
+        party.message(String.format(JOIN_PARTY_MESSAGE, ranked ? "Ranked" : "Unranked", kitType.getColoredDisplayName()));
         party.resetInventoriesDelayed();
         return true;
     }
@@ -156,7 +156,7 @@ public final class QueueHandler {
         partyQueueCache.remove(party);
 
         if (!silent) {
-            party.message(String.format(LEAVE_PARTY_MESSAGE, queue.isRanked() ? "ranked" : "unranked", queue.getKitType().getColoredDisplayName()));
+            party.message(String.format(LEAVE_PARTY_MESSAGE, queue.isRanked() ? "Ranked" : "Unranked", queue.getKitType().getColoredDisplayName()));
         }
 
         party.resetInventoriesDelayed();

@@ -33,8 +33,9 @@ final class KitTypeButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return kitType.getDisplayColor() + kitType.getDisplayName();
+        return kitType.getDisplayColor().toString() + ChatColor.BOLD.toString() + kitType.getDisplayName();
     }
+
 
     @Override
     public List<String> getDescription(Player player) {

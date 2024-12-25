@@ -42,7 +42,7 @@ public final class FollowHandler {
         } else {
             InventoryUtils.resetInventoryDelayed(player);
             VisibilityUtils.updateVisibility(player);
-            //Nametag PotPvPSI.getInstance().nameTagHandler.reloadOthersFor(player);
+            //`Nametag PotPvPSI.getInstance().nameTagHandler.reloadOthersFor(player);
 
             player.teleport(target);
         }
