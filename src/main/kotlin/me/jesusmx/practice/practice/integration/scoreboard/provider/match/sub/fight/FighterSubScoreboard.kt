@@ -32,7 +32,6 @@ class FighterScoreboard : SubScoreboard<Match>() {
     private val pingVariable = PingVariable()
 
     override fun accept(player : Player, scores : MutableList<String>, match : Match) {
-        scores.add("&7&m---------------------")
         val teams = match.teams
         if (teams.size != 2) {
             return
@@ -73,8 +72,6 @@ class FighterScoreboard : SubScoreboard<Match>() {
         if (bardEnergyScore != null) {
             scores.add("&e&lBard Energy&7: &f$bardEnergyScore")
         }
-        scores.add("&blunar.gg")
-        scores.add("&7&m---------------------")
     }
 
     private fun render1v1MatchLines(scores: MutableList<String>, otherTeam: MatchTeam, player: Player, match: Match) {
@@ -120,6 +117,7 @@ class FighterScoreboard : SubScoreboard<Match>() {
         player: Player,
         healingMethod: HealingMethod
     ) {
+        scores.add("&7&m--------------------")
         var partnerUuid: UUID? = null
         for (teamMember in ourTeam.allMembers) {
             if (teamMember === player.uniqueId) continue
@@ -155,10 +153,13 @@ class FighterScoreboard : SubScoreboard<Match>() {
         scores.addAll(this.renderTeamMemberOverviewLines(otherTeam))
         if (PotPvPSI.instance.matchHandler.getMatchPlaying(player).state == MatchState.IN_PROGRESS) {
             scores.add("&c")
+            scores.add("&blunar.gg")
+            scores.add("&7&m--------------------")
         }
     }
 
     fun render4v4MatchLines(scores: MutableList<String>, ourTeam: MatchTeam, otherTeam: MatchTeam) {
+        scores.add("&7&m--------------------")
         scores.add("&a&lTeam &f(" + ourTeam.aliveMembers.size + "/" + ourTeam.allMembers.size + ")")
         scores.addAll(this.renderTeamMemberOverviewLinesWithHearts(ourTeam))
         scores.add("&b")
@@ -167,18 +168,26 @@ class FighterScoreboard : SubScoreboard<Match>() {
                 .getMatchPlaying(Bukkit.getPlayer(ourTeam.firstAliveMember)).state == MatchState.IN_PROGRESS
         ) {
             scores.add("&c")
+            scores.add("&blunar.gg")
+            scores.add("&7&m--------------------")
         }
     }
 
     fun renderLargeMatchLines(scores: MutableList<String>, ourTeam: MatchTeam, otherTeam: MatchTeam) {
+        scores.add("&7&m--------------------")
         scores.add("&a&lTeam &f(" + ourTeam.aliveMembers.size + "/" + ourTeam.allMembers.size + ")")
         scores.addAll(this.renderTeamMemberOverviewLinesWithHearts(ourTeam))
         scores.add("&b")
+        scores.add("&blunar.gg")
+        scores.add("&7&m--------------------")
     }
 
     fun renderJumboMatchLines(scores: MutableList<String>, ourTeam: MatchTeam, otherTeam: MatchTeam) {
+        scores.add("&7&m--------------------")
         scores.add("&a&lTeam: &f" + ourTeam.aliveMembers.size + "/" + ourTeam.allMembers.size)
         scores.add("&c&lEnemies: &f" + otherTeam.aliveMembers.size + "/" + otherTeam.allMembers.size)
+        scores.add("&blunar.gg")
+        scores.add("&7&m--------------------")
     }
 
     fun renderTeamMemberOverviewLinesWithHearts(team: MatchTeam): List<String> {
