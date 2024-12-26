@@ -48,10 +48,11 @@ public final class ArenaHandler {
         // COMENTAR EL SPIGOT QUE NO USARAS
         // EL COLOR QUE RESALTA ES EL QUE DETECTARA....
         // YA SE QUE SE ME OLVIDO Xdddd
-/*        chunkSnap = new cSpigotChunk();
-        chunkSnap = new CarbonSpigotChunk();*/
-        chunkSnap = new VortexSpigotChunk();
+/*        chunkSnap = new cSpigotChunk();*/
+ /*       chunkSnap = new CarbonSpigotChunk();*/
+          chunkSnap = new VortexSpigotChunk();
 /*        chunkSnap = new AntonioSpigot();*/
+ /*       chunkSnap = new KatsuChunk();*/
     }
 
     //End fix shitty

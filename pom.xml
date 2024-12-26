@@ -47,6 +47,15 @@
 
         <!-- Spigot-API-->
         <dependency>
+            <groupId>dev.lugami</groupId>
+            <artifactId>katsu-server</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/server.jar/</systemPath>
+        </dependency>
+
+        <!-- Spigot-API-->
+        <dependency>
             <groupId>ga.vortex.spigot</groupId>
             <artifactId>VortexSpigot</artifactId>
             <version>1.8.8</version>

@@ -2,12 +2,13 @@ package net.frozenorb.potpvp.integration.spigot.chunk.impl;
 
 /*import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
 import org.bukkit.Chunk;
-import xyz.refinedev.spigot.chunk.ChunkSnapshot;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class CarbonSpigotChunk extends ChunkSnap<ChunkSnapshot> {
+
+
+public class KatsuChunk extends ChunkSnap<ChunkSnapshot> {
 
     @Override
     public ChunkSnapshot takeSnapshot(Chunk chunk) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

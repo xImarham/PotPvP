@@ -1,5 +1,5 @@
 # PotPvP 1.8
-A fork of PotPvP, porting it to 1.8 and changing mSpigot's dependency to VortexSpigot, RocketSpigot, CarbonSpigot
+A fork of PotPvP, porting it to 1.8 and changing mSpigot's dependency to VortexSpigot, RocketSpigot, CarbonSpigot. I added back a 1.8 fork of mSpigot .
 
 
 # Information

@@ -29,6 +29,7 @@ object ClassUtils {
 /*                    if(className.startsWith(CarbonSpigotChunk::class.java.name)) continue
                     if(className.startsWith(cSpigotChunk::class.java.name)) continue*/
                     if(className.startsWith(VortexSpigotChunk::class.java.name)) continue
+ /*                   if(className.startsWith(KatsuChunk::class.java.name)) continue*/
                     if (className.startsWith(pluginMainClass.getPackage().name)) {
                         try {
                             val clazz = Class.forName(className)
