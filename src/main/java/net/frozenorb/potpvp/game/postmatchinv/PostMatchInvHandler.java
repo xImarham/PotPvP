@@ -81,7 +81,7 @@ public final class PostMatchInvHandler {
                     .toArray(BaseComponent[]::new)
             );
 
-            spectatorLine = new ComponentBuilder("Spectators (" + spectatorNames.size() + "): ").color(ChatColor.YELLOW)
+            spectatorLine = new ComponentBuilder("Spectators (" + spectatorNames.size() + "): ").color(ChatColor.AQUA)
                 .append(firstFourNames).color(ChatColor.GRAY).event(hover)
                 .create();
         } else {
