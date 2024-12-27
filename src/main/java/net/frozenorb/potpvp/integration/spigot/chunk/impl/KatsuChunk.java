@@ -1,5 +1,6 @@
 package net.frozenorb.potpvp.integration.spigot.chunk.impl;
 
+import dev.lugami.spigot.chunk.ChunkSnapshot;
 import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
 import org.bukkit.Chunk;
 
