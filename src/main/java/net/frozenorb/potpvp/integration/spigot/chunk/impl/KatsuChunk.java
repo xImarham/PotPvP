@@ -1,6 +1,6 @@
 package net.frozenorb.potpvp.integration.spigot.chunk.impl;
 
-/*import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
+import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
 import org.bukkit.Chunk;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,4 +21,4 @@ public class KatsuChunk extends ChunkSnap<ChunkSnapshot> {
         Method method = chunk.getClass().getDeclaredMethod("restoreSnapshot", ChunkSnapshot.class);
         method.invoke(chunk, chunkSnapshot);
     }
-}*/
+}

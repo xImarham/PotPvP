@@ -1,6 +1,6 @@
 package net.frozenorb.potpvp.integration.spigot.chunk.impl;
 
-import eu.vortexdev.api.chunk.ChunkSnapshot;
+/*import eu.vortexdev.api.chunk.ChunkSnapshot;
 import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
 import org.bukkit.Chunk;
 
@@ -20,4 +20,4 @@ public class VortexSpigotChunk extends ChunkSnap<ChunkSnapshot> {
         Method method = chunk.getClass().getDeclaredMethod("restoreSnapshot", ChunkSnapshot.class);
         method.invoke(chunk, chunkSnapshot);
     }
-}
+}*/

@@ -11,7 +11,7 @@ import net.frozenorb.potpvp.game.arena.event.ArenaAllocatedEvent;
 import net.frozenorb.potpvp.game.arena.event.ArenaReleasedEvent;
 import net.frozenorb.potpvp.game.arena.listener.ArenaItemResetListener;
 import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
-import net.frozenorb.potpvp.integration.spigot.chunk.impl.VortexSpigotChunk;
+import net.frozenorb.potpvp.integration.spigot.chunk.impl.KatsuChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,9 +50,9 @@ public final class ArenaHandler {
         // YA SE QUE SE ME OLVIDO Xdddd
 /*        chunkSnap = new cSpigotChunk();*/
  /*       chunkSnap = new CarbonSpigotChunk();*/
-          chunkSnap = new VortexSpigotChunk();
+ /*         chunkSnap = new VortexSpigotChunk();*/
 /*        chunkSnap = new AntonioSpigot();*/
- /*       chunkSnap = new KatsuChunk();*/
+        chunkSnap = new KatsuChunk();
     }
 
     //End fix shitty

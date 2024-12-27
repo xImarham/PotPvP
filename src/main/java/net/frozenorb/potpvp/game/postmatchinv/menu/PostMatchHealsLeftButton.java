@@ -1,6 +1,7 @@
 package net.frozenorb.potpvp.game.postmatchinv.menu;
 
 import com.google.common.collect.ImmutableList;
+import net.frozenorb.potpvp.PotPvPSI;
 import net.frozenorb.potpvp.game.kittype.HealingMethod;
 import net.frozenorb.potpvp.util.menu.Button;
 import org.bukkit.ChatColor;
@@ -34,7 +35,7 @@ final class PostMatchHealsLeftButton extends Button {
     public List<String> getDescription(Player player) {
         if (healingMethod == HealingMethod.POTIONS) {
             return ImmutableList.of(
-                ChatColor.YELLOW.toString() + player.getName() + " missed " + missedHeals + " pot" + (missedHeals == 1 ? "." : "s.")
+                    ChatColor.YELLOW + PotPvPSI.getInstance().getUuidCache().name(this.player) + " missed " + missedHeals + " pot" + (missedHeals == 1 ? "." : "s.")
             );
         } else {
             return ImmutableList.of();
