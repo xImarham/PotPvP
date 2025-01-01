@@ -53,8 +53,8 @@ public final class MatchGeneralListener implements Listener {
 
         // if we're ending the match we don't drop pots/bowls
         if (match.getState() == MatchState.ENDING) {
-            //event.getDrops().removeIf(i -> i.getType() == Material.POTION || i.getType() == Material.GLASS_BOTTLE || i.getType() == Material.MUSHROOM_SOUP || i.getType() == Material.BOWL);
-            event.getDrops().clear();
+            event.getDrops().removeIf(i -> i.getType() == Material.POTION || i.getType() == Material.GLASS_BOTTLE || i.getType() == Material.MUSHROOM_SOUP || i.getType() == Material.BOWL);
+           // event.getDrops().clear();
         }
     }
 

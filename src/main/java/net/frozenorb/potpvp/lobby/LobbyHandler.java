@@ -42,6 +42,7 @@ public final class LobbyHandler {
     public void returnToLobby(Player player) {
         returnToLobbySkipItemSlot(player);
         player.getInventory().setHeldItemSlot(0);
+        updatePlayerVisibility(player);
     }
 
     public void returnToLobbySkipItemSlot(Player player) {
@@ -57,6 +58,9 @@ public final class LobbyHandler {
         player.setGameMode(GameMode.SURVIVAL);
 
         returnedToLobby.put(player.getUniqueId(), System.currentTimeMillis());
+
+        // Update player visibility after teleporting
+        updatePlayerVisibility(player);
     }
 
     public long getLastLobbyTime(Player player) {
@@ -89,6 +93,9 @@ public final class LobbyHandler {
             if (!mode) {
                 returnToLobbySkipItemSlot(player);
             }
+
+            // Update visibility when entering or exiting spectator mode
+            updatePlayerVisibility(player);
         }
     }
 
@@ -96,5 +103,22 @@ public final class LobbyHandler {
         Location spawn = Bukkit.getWorlds().get(0).getSpawnLocation();
         spawn.add(0.5, 0, 0.5); // 'prettify' so players spawn in middle of block
         return spawn;
+    }
+
+    /**
+     * Updates player visibility so that players in the lobby are hidden from each other.
+     * This is done when players are added to the lobby or when their spectator mode is toggled.
+     *
+     * @param player The player whose visibility needs to be updated.
+     */
+    private void updatePlayerVisibility(Player player) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p != player) {
+                p.hidePlayer(player); // Hide the player from others
+                player.hidePlayer(p); // Hide others from the player
+            } else {
+                p.showPlayer(player); // Show the player to themselves
+            }
+        }
     }
 }
