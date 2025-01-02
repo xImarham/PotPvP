@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
@@ -35,6 +36,7 @@ public final class EditKitMenu extends Menu {
 
     @Override
     public void onOpen(Player player) {
+        player.setMetadata("Edit", new FixedMetadataValue(PotPvPSI.getInstance(), true));
         player.getInventory().setContents(kit.getInventoryContents());
         Bukkit.getScheduler().runTaskLater(PotPvPSI.getInstance(), player::updateInventory, 1L);
     }
@@ -42,7 +44,9 @@ public final class EditKitMenu extends Menu {
     @Override
     public void onClose(Player player) {
         InventoryUtils.resetInventoryDelayed(player);
+        player.removeMetadata("Edit", PotPvPSI.getInstance());
     }
+
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {

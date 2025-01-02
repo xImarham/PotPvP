@@ -2,6 +2,7 @@ package net.frozenorb.potpvp.lobby.listener;
 
 import net.frozenorb.potpvp.util.menu.Menu;
 import net.frozenorb.potpvp.lobby.LobbyHandler;
+import net.frozenorb.potpvp.game.kit.menu.editkit.EditKitMenu;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -71,7 +72,7 @@ public class LobbyGeneralListener implements Listener
             return;
         }
         Menu openMenu = Menu.getCurrentlyOpenedMenus().get(player.getName());
-        if (player.hasMetadata("Build") || (openMenu != null && openMenu.isNoncancellingInventory())) {
+        if (player.hasMetadata("Build") || player.hasMetadata("Edit") || (openMenu != null && openMenu.isNoncancellingInventory())) {
             event.getItemDrop().remove();
         }
         else {
@@ -79,23 +80,40 @@ public class LobbyGeneralListener implements Listener
         }
     }
 
+    // cancel inventory interaction in the lobby except for menus
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Player clicked = (Player)event.getWhoClicked();
-        if (!this.lobbyHandler.isInLobby(clicked) || clicked.hasMetadata("Build") || Menu.getCurrentlyOpenedMenus().containsKey(clicked.getName())) {
+        Player clicked = (Player) event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
+
+        if (Menu.currentlyOpenedMenus.get(player.getName()) instanceof EditKitMenu) {
             return;
         }
+
+        if (!lobbyHandler.isInLobby(clicked) || clicked.hasMetadata("Build") || clicked.hasMetadata("Edit") || Menu.currentlyOpenedMenus.containsKey(clicked.getName())) {
+            return;
+        }
+
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        Player clicked = (Player)event.getWhoClicked();
-        if (!this.lobbyHandler.isInLobby(clicked) || clicked.hasMetadata("Build") || Menu.getCurrentlyOpenedMenus().containsKey(clicked.getName())) {
+        Player clicked = (Player) event.getWhoClicked();
+        Player player = (Player) event.getWhoClicked();
+
+        if (Menu.currentlyOpenedMenus.get(player.getName()) instanceof EditKitMenu) {
             return;
         }
+
+
+        if (!lobbyHandler.isInLobby(clicked) || clicked.hasMetadata("Build") || clicked.hasMetadata("Edit") || Menu.currentlyOpenedMenus.containsKey(clicked.getName())) {
+            return;
+        }
+
         event.setCancelled(true);
     }
+
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
@@ -107,14 +125,18 @@ public class LobbyGeneralListener implements Listener
     @EventHandler
     public void onInventoryMove(InventoryMoveItemEvent event) {
         InventoryHolder inventoryHolder = event.getSource().getHolder();
+
         if (inventoryHolder instanceof Player) {
-            Player player = (Player)inventoryHolder;
-            if (!this.lobbyHandler.isInLobby(player) || Menu.getCurrentlyOpenedMenus().containsKey(player.getName())) {
+            Player player = (Player) inventoryHolder;
+
+            if (!lobbyHandler.isInLobby(player) || Menu.currentlyOpenedMenus.containsKey(player.getName())) {
                 return;
             }
+
             event.setCancelled(true);
         }
     }
+
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerInteract(PlayerInteractEvent event) {

@@ -207,7 +207,6 @@ public final class Match {
                 }
                 matchTeam.removePoints();
             }
-
             messageAll(ChatColor.RED + "Match ended.");
             Bukkit.getScheduler().cancelTask(rallyID);
             Bukkit.getPluginManager().callEvent(new MatchEndEvent(this));

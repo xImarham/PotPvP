@@ -32,7 +32,7 @@ public abstract class Menu {
     @Getter @Setter private boolean placeholder = false;
     @Getter @Setter private boolean noncancellingInventory = false;
 
-    @Getter private static Map<UUID,Menu> currentlyOpenedMenus;
+    @Getter public static Map<UUID,Menu> currentlyOpenedMenus;
     @Getter private static Map<UUID,BukkitRunnable> checkTasks;
 
     private Inventory createInventory(Player player) {

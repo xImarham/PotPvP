@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 @UtilityClass
 public final class PostMatchInvLang {
 
-    static final String LINE;
+
+    public static final String LINE;
     static final String INVENTORY_HEADER;
     public static final String WINNER;
     public static final String LOSER;
