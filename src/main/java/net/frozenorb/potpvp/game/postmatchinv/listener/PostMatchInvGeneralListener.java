@@ -3,6 +3,7 @@ package net.frozenorb.potpvp.game.postmatchinv.listener;
 import net.frozenorb.potpvp.PotPvPSI;
 import net.frozenorb.potpvp.game.match.MatchTeam;
 import net.frozenorb.potpvp.game.match.event.MatchCountdownStartEvent;
+import net.frozenorb.potpvp.game.match.event.MatchEndEvent;
 import net.frozenorb.potpvp.game.match.event.MatchTerminateEvent;
 import net.frozenorb.potpvp.game.postmatchinv.PostMatchInvHandler;
 import org.bukkit.event.EventHandler;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public final class PostMatchInvGeneralListener implements Listener {
 
     @EventHandler
-    public void onMatchTerminate(MatchTerminateEvent event) {
+    public void onMatchEvent(MatchEndEvent event) {
         PostMatchInvHandler postMatchInvHandler = PotPvPSI.getInstance().getPostMatchInvHandler();
         postMatchInvHandler.recordMatch(event.getMatch());
     }

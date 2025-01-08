@@ -1,8 +1,7 @@
 package net.frozenorb.potpvp.game.match.listener;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnWeatherEntity;
 import net.frozenorb.potpvp.PotPvPSI;
 import net.frozenorb.potpvp.game.match.Match;
 import net.frozenorb.potpvp.game.match.MatchHandler;
@@ -19,7 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,7 +38,9 @@ public final class MatchDeathMessageListener implements Listener {
 
         Player killed = event.getEntity();
         Player killer = killed.getKiller();
-        PacketContainer lightningPacket = createLightningPacket(killed.getLocation());
+
+        // Create lightning packet for the death location
+        WrapperPlayServerSpawnWeatherEntity lightningPacket = createLightningPacket(killed.getLocation());
 
         float thunderSoundPitch = 0.8F + ThreadLocalRandom.current().nextFloat() * 0.2F;
         float explodeSoundPitch = 0.5F + ThreadLocalRandom.current().nextFloat() * 0.2F;
@@ -48,7 +48,7 @@ public final class MatchDeathMessageListener implements Listener {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             UUID onlinePlayerUuid = onlinePlayer.getUniqueId();
 
-            // if this player has no relation to the match skip
+            // Skip players who aren't involved in the match
             if (match.getTeam(onlinePlayerUuid) == null && !match.isSpectator(onlinePlayerUuid)) {
                 continue;
             }
@@ -56,19 +56,16 @@ public final class MatchDeathMessageListener implements Listener {
             String killedNameColor = PotPvPNametagProvider.getNameColor(killed, onlinePlayer);
             String killedFormattedName = killedNameColor + killed.getName();
 
-            // if the killer died before the player did we just pretend they weren't
-            // involved (their name would show up as a spectator, which would be confusing
-            // for players)
+            // If no killer or if the killer is a spectator, only show that the player died
             if (killer == null || match.isSpectator(killer.getUniqueId())) {
                 onlinePlayer.sendMessage(String.format(NO_KILLER_MESSAGE, killedFormattedName));
             } else {
                 String killerNameColor = PotPvPNametagProvider.getNameColor(killer, onlinePlayer);
                 String killerFormattedName = killerNameColor + killer.getName();
                 onlinePlayer.sendMessage(String.format(KILLED_BY_OTHER_MESSAGE, killedFormattedName, killerFormattedName));
-/*                for (int i = 0; i < 6; ++i) {
-                    PotPvPSI.getInstance().getKillEffectHandler().playEffect(killer, killed);
-                }*/
             }
+
+            // Send lightning and thunder if the player has the setting enabled
             if (settingHandler.getSetting(onlinePlayer, Setting.VIEW_OTHERS_LIGHTNING)) {
                 onlinePlayer.playSound(killed.getLocation(), Sound.AMBIENCE_THUNDER, 10000F, thunderSoundPitch);
                 onlinePlayer.playSound(killed.getLocation(), Sound.EXPLODE, 2.0F, explodeSoundPitch);
@@ -77,26 +74,26 @@ public final class MatchDeathMessageListener implements Listener {
         }
     }
 
-    public PacketContainer createLightningPacket(Location location) {
-        PacketContainer lightningPacket = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY_WEATHER);
-
-        lightningPacket.getModifier().writeDefaults();
-        lightningPacket.getIntegers().write(0, 128); // entity id of 128
-        lightningPacket.getIntegers().write(4, 1); // type of lightning (1)
-        lightningPacket.getIntegers().write(1, (int) (location.getX() * 32.0D)); // x
-        lightningPacket.getIntegers().write(2, (int) (location.getY() * 32.0D)); // y
-        lightningPacket.getIntegers().write(3, (int) (location.getZ() * 32.0D)); // z
-
+    /**
+     * Creates a lightning spawn packet.
+     *
+     * @param location The location to spawn the lightning at.
+     * @return The lightning packet.
+     */
+    public WrapperPlayServerSpawnWeatherEntity createLightningPacket(Location location) {
+        WrapperPlayServerSpawnWeatherEntity lightningPacket = new WrapperPlayServerSpawnWeatherEntity(93, (byte) 1, location.getX(), location.getY(), location.getZ());
         return lightningPacket;
     }
 
-    public void sendLightningPacket(Player target, PacketContainer packet) {
-        try {
-            ProtocolLibrary.getProtocolManager().sendServerPacket(target, packet);
-        } catch (InvocationTargetException ignored) {
-            // will never happen, ProtocolWrapper (the lib this code was from)
-            // ignores this exception as well
-        }
-    }
+    /**
+     * Sends the lightning packet to a specific player.
+     *
+     * @param target The player to send the packet to.
+     * @param packet The packet to send.
+     */
+    public void sendLightningPacket(Player target, WrapperPlayServerSpawnWeatherEntity packet) {
+        PacketEvents.getAPI().getPlayerManager().sendPacket(target,packet);
 
+
+    }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.lunarclient.bukkitapi.LunarClientAPI;
 import lombok.Getter;
 import net.frozenorb.potpvp.PotPvPSI;
-import net.frozenorb.potpvp.integration.lunar.RallyPoint;
 import net.frozenorb.potpvp.util.CC;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -23,7 +22,6 @@ public final class MatchTeam {
      * All players who were ever part of this team, including those who logged off / died
      */
     @Getter public final Set<UUID> allMembers;
-    @Getter public Map<UUID, RallyPoint> rallys = new HashMap<>();
 
     /**
      * All players who are currently alive.
@@ -41,68 +39,6 @@ public final class MatchTeam {
         this.aliveMembers.addAll(initialMembers);
     }
 
-    public void rally(RallyPoint point) {
-        Player sender = point.getPlayer();
-        UUID uuid = sender.getUniqueId();
-        if(rallys.containsKey(uuid)) {
-            updatePoint(point);
-            sender.sendMessage(CC.translate(PotPvPSI.getInstance().getMessagesConfig().getString("RALLY.POINT")));
-        } else {
-            addPoint(point);
-            sender.sendMessage(CC.translate(PotPvPSI.getInstance().getMessagesConfig().getString("RALLY.POINT")));
-        }
-
-    }
-
-    public void addPoint(RallyPoint point) {
-        rallys.put(point.getPlayer().getUniqueId(), point);
-        aliveMembers.forEach(uuid -> {
-            LunarClientAPI.getInstance().sendWaypoint(Bukkit.getPlayer(uuid), point.getLcWaypoint());
-        });
-    }
-
-    public void updatePoint(RallyPoint point) {
-        RallyPoint input = rallys.get(point.getPlayer().getUniqueId());
-        if(input.getLocation() == point.getLocation()) return;
-        aliveMembers.forEach(t -> {
-            removePoint(t, input);
-        });
-        rallys.remove(point.getPlayer().getUniqueId());
-        addPoint(point);
-    }
-
-    public void removePoint(RallyPoint point) {
-        allMembers.forEach(uuid -> {
-            removePoint(uuid, point);
-        });
-        rallys.remove(point.getPlayer().getUniqueId());
-    }
-
-    public void removePoint(UUID uuid, RallyPoint point) {
-        LunarClientAPI.getInstance().removeWaypoint(Bukkit.getPlayer(uuid), point.getLcWaypoint());
-    }
-
-    public void removePoints(UUID uuid) {
-        if(rallys.isEmpty()) return;
-        if(!rallys.containsKey(uuid)) return;
-        rallys.keySet().forEach(t -> {
-            removePoint(uuid, rallys.get(t));
-        });
-        getAliveMembers().forEach(t -> {
-            removePoint(t, rallys.get(uuid));
-        });
-        rallys.remove(uuid);
-    }
-
-    public void removePoints() {
-        if(rallys.isEmpty()) return;
-        rallys.keySet().forEach(uuid -> {
-            allMembers.forEach(p -> {
-                LunarClientAPI.getInstance().removeWaypoint(Bukkit.getPlayer(p), rallys.get(uuid).getLcWaypoint());
-            });
-        });
-        rallys.clear();
-    }
 
     /**
      * Marks the given player as dead (will no longer appear in {@link MatchTeam#getAliveMembers()}, etc)
@@ -111,7 +47,6 @@ public final class MatchTeam {
      */
     public void markDead(UUID playerUuid) {
         aliveMembers.remove(playerUuid);
-        removePoints(playerUuid);
     }
 
     /**

@@ -1,6 +1,6 @@
 package net.frozenorb.potpvp.kt.util.classes
 
-import net.frozenorb.potpvp.integration.spigot.chunk.impl.KatsuChunk
+import net.frozenorb.potpvp.integration.spigot.chunk.impl.ConfluenceChunk
 import org.bukkit.plugin.Plugin
 import java.io.File
 import java.util.jar.JarFile
@@ -29,7 +29,8 @@ object ClassUtils {
 /*                    if(className.startsWith(CarbonSpigotChunk::class.java.name)) continue
                     if(className.startsWith(cSpigotChunk::class.java.name)) continue*/
          /*           if(className.startsWith(VortexSpigotChunk::class.java.name)) */
-                    if(className.startsWith(KatsuChunk::class.java.name)) continue
+             /*       if(className.startsWith(KatsuChunk::class.java.name)) continue*/
+                    if(className.startsWith(ConfluenceChunk::class.java.name)) continue
                     if (className.startsWith(pluginMainClass.getPackage().name)) {
                         try {
                             val clazz = Class.forName(className)

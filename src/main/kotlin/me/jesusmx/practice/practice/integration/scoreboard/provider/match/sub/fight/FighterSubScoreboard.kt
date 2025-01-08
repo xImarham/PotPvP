@@ -139,7 +139,7 @@ class FighterScoreboard : SubScoreboard<Match>() {
                 namePrefix = "&a"
                 healthStr = healthColor.toString() + health + " ❤ "
                 healsStr =
-                    if (healingMethod != null) ChatColor.GRAY.toString() + "| " + ChatColor.RESET + healsColor.toString() + heals + " " + (if (heals == 1) healingMethod.shortSingular else healingMethod.shortPlural) else ""
+                    if (healingMethod != null) ChatColor.GRAY.toString() + "⏐ " + ChatColor.RESET + healsColor.toString() + heals + " " + (if (heals == 1) healingMethod.shortSingular else healingMethod.shortPlural) else ""
             } else {
                 namePrefix = "&7&m"
                 healthStr = "&4RIP"

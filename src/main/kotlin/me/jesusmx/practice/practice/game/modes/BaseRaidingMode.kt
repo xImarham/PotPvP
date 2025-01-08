@@ -26,7 +26,7 @@ class BaseRaidingMode : PvPMode() {
     fun onMatchCountdownStart(event : MatchCountdownStartEvent) {
         val kitHandler = PotPvPSI.instance.kitHandler
         val match = event.match
-        if (!match.kitType.id.lowercase().contains("baseraiding")) return
+        if (!match.kitType.id.toLowerCase().contains("baseraiding")) return
         val raiderKit = KitType.byId("HCF_RAIDER")
         val trapperKit = KitType.byId("HCF_TRAPPER")
         for(team in match.teams) {
@@ -90,7 +90,7 @@ class BaseRaidingMode : PvPMode() {
         val match = matchHandler.getMatchPlaying(event.player) ?: return
 
         val kitType = match.kitType
-        if(!kitType.id.lowercase().contains("baseraiding")) return
+        if (!kitType.id.toLowerCase().contains("baseraiding")) return
         val kitHandler = PotPvPSI.instance.kitHandler
         val clickedItem = event.item
         val player = event.player
@@ -130,7 +130,8 @@ class BaseRaidingMode : PvPMode() {
         val matchHandler = PotPvPSI.instance.matchHandler
         val match = matchHandler.getMatchPlaying(event.entity) ?: return
         val kitType = match.kitType
-        if(!kitType.id.lowercase().contains("baseraiding")) return
+        if (!kitType.id.toLowerCase().contains("baseraiding")) return
+
 
 
         val raiderKit = KitType.byId("HCF_RAIDER")
@@ -152,7 +153,7 @@ class BaseRaidingMode : PvPMode() {
     fun onPlayerBreakBlock(event : BlockBreakEvent) {
         val player = event.player
         val match = PotPvPSI.instance.matchHandler.getMatchPlaying(player)?: return
-        if(!match.kitType.id.lowercase().contains("baseraiding")) return
+        if (!match.kitType.id.toLowerCase().contains("baseraiding")) return
         event.isCancelled = !player.hasMetadata("TRAPPER")
     }
 
@@ -160,7 +161,7 @@ class BaseRaidingMode : PvPMode() {
     fun onPlayerPlaceBlock(event : BlockPlaceEvent) {
         val player = event.player
         val match = PotPvPSI.instance.matchHandler.getMatchPlaying(player)?: return
-        if(!match.kitType.id.lowercase().contains("baseraiding")) return
+        if (!match.kitType.id.toLowerCase().contains("baseraiding")) return
         event.isCancelled = !player.hasMetadata("TRAPPER")
     }
 
@@ -168,7 +169,7 @@ class BaseRaidingMode : PvPMode() {
     fun onPlayerOpenFence(event : PlayerInteractEvent) {
         val player = event.player
         val match = PotPvPSI.instance.matchHandler.getMatchPlaying(player)?: return
-        if(!match.kitType.id.lowercase().contains("baseraiding")) return
+        if (!match.kitType.id.toLowerCase().contains("baseraiding")) return
         // Prevent spectators from opening fence gates
         if(event.clickedBlock == null) return
         if(event.clickedBlock.type == Material.FENCE_GATE || event.clickedBlock.type == Material.WOOD_DOOR) {
@@ -181,7 +182,8 @@ class BaseRaidingMode : PvPMode() {
         val matchHandler = PotPvPSI.instance.matchHandler
         val match = matchHandler.getMatchPlaying(event.player) ?: return
         val kitType = match.kitType
-        if(!kitType.id.lowercase().contains("baseraiding")) return
+        if (!kitType.id.toLowerCase().contains("baseraiding")) return
+
         val player = event.player
         val raiderKit = KitType.byId("HCF_RAIDER")
         val trapperKit = KitType.byId("HCF_TRAPPER")

@@ -29,19 +29,63 @@ public class HologramsHandler {
     }
 
     public void load() {
+        // Ensure that the config object is initialized and the configuration file is loaded
+        if (config == null) {
+            System.out.println("Config object is not initialized!");
+            return;
+        }
+
+        // Try to get the configuration
+        if (config.getConfiguration() == null) {
+            System.out.println("Config file is not loaded properly!");
+            return;
+        }
+
+        // Get the 'PLACES' section from the config
         ConfigurationSection section = config.getConfiguration().getConfigurationSection("PLACES");
-        if(section == null) return;
+        if (section == null) {
+            System.out.println("PLACES section is missing in the config!");
+            return;
+        }
+
+        // Get the 'HOLOGRAMS' section from the config
+        Set<String> hlms = config.getConfiguration().getConfigurationSection("HOLOGRAMS") != null
+                ? config.getConfiguration().getConfigurationSection("HOLOGRAMS").getKeys(false)
+                : Collections.emptySet();
+
+        if (hlms.isEmpty()) {
+            System.out.println("HOLOGRAMS section is missing or empty!");
+        }
+
+        // Iterate over the keys in the 'PLACES' section
         for (String s : section.getKeys(false)) {
-            Set<String> hlms = config.getConfiguration().getConfigurationSection("HOLOGRAMS").getKeys(false);
+            // Check if the corresponding hologram exists in 'HOLOGRAMS'
             if (!hlms.contains(s)) {
-                System.out.println(s + " Kittype dont not exist more!");
+                System.out.println(s + " KitType does not exist anymore!");
                 continue;
             }
-            PracticeHologram hologram = new PracticeHologram(s, LocationUtils.deserialize(config.getString("PLACES." + s)));
+
+            // Get the location for this hologram
+            String locationString = config.getString("PLACES." + s);
+            if (locationString == null) {
+                System.out.println("Location for hologram " + s + " is missing in the config.");
+                continue;
+            }
+
+            // Deserialize the location
+            Location location = LocationUtils.deserialize(locationString);
+            if (location == null) {
+                System.out.println("Failed to deserialize location for hologram " + s);
+                continue;
+            }
+
+            // Create and spawn the hologram
+            PracticeHologram hologram = new PracticeHologram(s, location);
             hologram.spawn();
             holograms.add(hologram);
         }
     }
+
 
     public static void spawn(String hologram, Location location) {
         Set<String> hlms = config.getConfiguration().getConfigurationSection("HOLOGRAMS").getKeys(false);

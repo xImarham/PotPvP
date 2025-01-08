@@ -4,6 +4,7 @@ import me.jesusmx.practice.consumerapi.TriConsumer
 import me.jesusmx.practice.practice.integration.scoreboard.provider.match.variable.DurationVariable
 import me.jesusmx.practice.practice.integration.scoreboard.provider.match.variable.OpponentVariable
 import me.jesusmx.practice.practice.integration.scoreboard.provider.match.variable.PingVariable
+import me.jesusmx.practice.practice.integration.scoreboard.provider.match.variable.KitTypeVariable
 import net.frozenorb.potpvp.PotPvPSI
 import net.frozenorb.potpvp.game.match.Match
 import net.frozenorb.potpvp.game.match.MatchTeam
@@ -17,6 +18,7 @@ class SpectatorScoreboard : TriConsumer<Player, MutableList<String>, Match> {
     private val pingVariable = PingVariable()
     private val opponentVariable = OpponentVariable()
     private val durationVariable = DurationVariable()
+    private val kitTypeVariable = KitTypeVariable()
 
     override fun accept(player : Player, scores : MutableList<String>, match : Match) {
         val teams: List<*> = match.teams
@@ -36,6 +38,7 @@ class SpectatorScoreboard : TriConsumer<Player, MutableList<String>, Match> {
             }
         } else {
             config.getStringList("IN-SPECTATOR-MODE").stream()
+                .map { it.replace("%kittype%", kitTypeVariable.format(player, match)) }
                 .map { it.replace("%duration%", durationVariable.format(player, match)) }
                 .map { it.replace("%player-1%", PotPvPSI.instance.uuidCache.name(teamOne.firstMember)) }
                 .map { it.replace("%player-2%", PotPvPSI.instance.uuidCache.name(teamTwo.firstMember)) }

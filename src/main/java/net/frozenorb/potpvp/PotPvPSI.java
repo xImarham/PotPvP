@@ -1,6 +1,10 @@
 package net.frozenorb.potpvp;
 
 import com.comphenix.protocol.ProtocolLibrary;
+import com.github.retrooper.packetevents.event.PacketListenerCommon;
+import io.github.retrooper.packetevents.manager.InternalBukkitPacketListener;
+import com.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.PacketEventsPlugin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -9,6 +13,7 @@ import com.google.gson.stream.JsonWriter;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
 import me.jesusmx.practice.practice.ability.AbilitySystem;
 import me.jesusmx.practice.practice.ability.provider.PandaAbility;
@@ -35,6 +40,7 @@ import net.frozenorb.potpvp.game.queue.QueueHandler;
 import net.frozenorb.potpvp.game.tournament.TournamentHandler;
 import net.frozenorb.potpvp.integration.holograms.HologramsHandler;
 import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
+import net.frozenorb.potpvp.integration.tab.PotPvPLayoutProvider;
 import net.frozenorb.potpvp.kt.command.CommandHandler;
 import net.frozenorb.potpvp.kt.morpheus.Morpheus;
 import net.frozenorb.potpvp.kt.morpheus.game.GameListeners;
@@ -62,6 +68,8 @@ import net.frozenorb.potpvp.util.menu.ButtonListener;
 import net.frozenorb.potpvp.util.potpvp.PotPvPCache;
 import net.frozenorb.potpvp.util.scoreboard.Assemble;
 import net.frozenorb.potpvp.util.scoreboard.AssembleStyle;
+import net.frozenorb.potpvp.util.tablist.shared.TabHandler;
+import net.frozenorb.potpvp.util.tablist.versions.v1_8_R3.v1_8_R3TabAdapter;
 import net.frozenorb.potpvp.util.uuid.IUUIDCache;
 import net.frozenorb.potpvp.util.uuid.UUIDCache;
 import org.bukkit.Bukkit;
@@ -145,6 +153,18 @@ public final class PotPvPSI extends JavaPlugin {
     public Assemble assemble;
 
     @Override
+    public void onLoad () {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().getSettings()
+                .reEncodeByDefault(false)
+                .checkForUpdates(true)
+                .bStats(false);
+        PacketEvents.getAPI().load();
+    }
+
+
+
+    @Override
     public void onEnable() {
         PotPvPSI.instance = this;
         saveDefaultConfig();
@@ -161,10 +181,10 @@ public final class PotPvPSI extends JavaPlugin {
         this.tablistmatchConfig = new ConfigFile(this, "tablist/match/in-match");
         this.tablistmatchPartyConfig = new ConfigFile(this, "tablist/match/in-match-party");
 
-/*        this.tablistspectatorParticipantConfig = new ConfigFile(this, "tablist/spectators");
+        this.tablistspectatorParticipantConfig = new ConfigFile(this, "tablist/spectators");
         this.tablistspectatorNoParticipantConfig = new ConfigFile(this, "tablist/spectators");
         this.tablistspectatorPartyConfig = new ConfigFile(this, "tablist/spectators");
-        this.tablistspectatorWithoutPartyConfig = new ConfigFile(this, "tablist/spectators");*/
+        this.tablistspectatorWithoutPartyConfig = new ConfigFile(this, "tablist/spectators");
 
         for (World world : Bukkit.getWorlds()) {
             world.setGameRuleValue("doDaylightCycle", "false");
@@ -197,6 +217,13 @@ public final class PotPvPSI extends JavaPlugin {
         nametagEngine.load();
         nametagEngine.registerProvider(new PotPvPNametagProvider());
 
+        if (getConfig().getBoolean("SETTINGS.TABLIST")) {
+            if (Bukkit.getVersion().contains("1.8")) {
+                new TabHandler(new v1_8_R3TabAdapter(), new PotPvPLayoutProvider(), this, 20L);
+            }
+        }
+
+
         if (this.getServer().getPluginManager().isPluginEnabled("HolographicDisplays")) {
             this.hologramsConfig = new ConfigFile(this, "holograms");
             Bukkit.getServer().getScheduler().runTaskLater(this, () -> (hologramsHandler = new HologramsHandler()).load(), 20L);
@@ -205,8 +232,11 @@ public final class PotPvPSI extends JavaPlugin {
         visibilityEngine = new VisibilityEngine();
         visibilityEngine.load();
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PingAdapter());
+        PacketEvents.getAPI().init();
+        PacketEvents.getAPI().getEventManager().registerListener(new PingAdapter());
         this.getServer().getPluginManager().registerEvents(new PingAdapter(), this);
+
+
 
         settingHandler = new SettingHandler();
         duelHandler = new DuelHandler();
@@ -262,6 +292,7 @@ public final class PotPvPSI extends JavaPlugin {
         if(hologramsHandler != null) {
             hologramsHandler.save();
         }
+        PacketEvents.getAPI().terminate();
     }
 
     private void setupRedis() {

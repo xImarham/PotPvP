@@ -35,7 +35,7 @@ public class KitButton extends Button {
         int counter = 1;
 
         for (Entry<String, Integer> entry : PotPvPSI.getInstance().getEloHandler().topElo(kitType).entrySet()) {
-            description.add(CC.translate("&6#" + counter + " &f" + entry.getKey() + " &7- &f" + entry.getValue()));
+            description.add(CC.translate("&b#" + counter + " &f" + entry.getKey() + " &7- &f" + entry.getValue()));
 
             counter++;
         }

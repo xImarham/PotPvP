@@ -78,7 +78,6 @@ public final class PartyItems {
                     .lore(config.getStringList("PARTY-KIT-EDITOR.LORE")).build()
                     : new ItemBuilder(Material.AIR).build();
 
-
     static {
         ICON_TYPE = Material.NETHER_STAR;
     }

@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import net.frozenorb.potpvp.PotPvPSI;
 import net.frozenorb.potpvp.game.match.Match;
 import net.frozenorb.potpvp.game.match.MatchEndReason;
+import net.frozenorb.potpvp.game.match.MatchState;
 import net.frozenorb.potpvp.game.match.MatchTeam;
 import net.frozenorb.potpvp.game.postmatchinv.listener.PostMatchInvGeneralListener;
 import net.frozenorb.potpvp.util.PatchedPlayerUtils;
@@ -29,19 +30,26 @@ public final class PostMatchInvHandler {
 
     public void recordMatch(Match match) {
         if (match.getEndReason() == MatchEndReason.FORCEFULLY_TERMINATED) return;
+
         saveInventories(match);
-        messagePlayers(match);
+
+        Bukkit.getScheduler().runTaskLater(PotPvPSI.getInstance(), () -> {
+            messagePlayers(match);
+        }, 3L); //150ms delay to allow processing
     }
+
 
     public void saveInventories(Match match) {
         Map<UUID, PostMatchPlayer> matchPlayers = match.getPostMatchPlayers();
 
+        // Save data for all members (alive or dead)
         for (MatchTeam team : match.getTeams()) {
-            for (UUID member : team.getAliveMembers()) {
+            for (UUID member : team.getAllMembers()) { // Use getAllMembers() instead of getAliveMembers()
                 playerData.put(member, matchPlayers);
             }
         }
 
+        // Save data for spectators
         for (UUID spectator : match.getSpectators()) {
             playerData.put(spectator, matchPlayers);
         }
@@ -50,10 +58,48 @@ public final class PostMatchInvHandler {
     public void messagePlayers(Match match) {
         Map<UUID, Object[]> invMessages = new HashMap<>();
 
-        BaseComponent[] spectatorLine;
+        // Create a message for spectators
+        BaseComponent[] spectatorLine = createSpectatorMessage(match);
+
+        // Create inventory messages for players
+        createInvMessages(match, invMessages);
+
+        // Send messages to all players
+        invMessages.forEach((uuid, lines) -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) {
+                return; // Skip offline players
+            }
+
+            // Message header
+            player.sendMessage(PostMatchInvLang.LINE);
+            player.sendMessage(ChatColor.GOLD + "Post-Match Inventories " + ChatColor.GRAY + "(click name to view)");
+
+            // Send inventory lines
+            for (Object line : lines) {
+                if (line instanceof TextComponent[]) {
+                    player.spigot().sendMessage((TextComponent[]) line);
+                } else if (line instanceof TextComponent) {
+                    player.spigot().sendMessage((TextComponent) line);
+                } else if (line instanceof String) {
+                    player.sendMessage((String) line);
+                }
+            }
+
+            // Send spectator information (if available)
+            if (spectatorLine != null) {
+                player.spigot().sendMessage(spectatorLine);
+            }
+
+            // Message footer
+            player.sendMessage(PostMatchInvLang.LINE);
+        });
+    }
+
+    private BaseComponent[] createSpectatorMessage(Match match) {
         List<UUID> spectatorUuids = new ArrayList<>(match.getSpectators());
 
-        // don't count actual players and players in silent mode.
+        // Exclude players who are on teams or in silent mode
         spectatorUuids.removeIf(uuid -> {
             Player player = Bukkit.getPlayer(uuid);
             return match.getPreviousTeam(uuid) != null;
@@ -64,10 +110,7 @@ public final class PostMatchInvHandler {
             spectatorNames.sort(String::compareToIgnoreCase);
 
             String firstFourNames = Joiner.on(", ").join(
-                spectatorNames.subList(
-                    0,
-                    Math.min(spectatorNames.size(), 4)
-                )
+                    spectatorNames.subList(0, Math.min(spectatorNames.size(), 4))
             );
 
             if (spectatorNames.size() > 4) {
@@ -75,45 +118,18 @@ public final class PostMatchInvHandler {
             }
 
             HoverEvent hover = new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                spectatorNames.stream()
-                    .map(n -> new TextComponent(ChatColor.AQUA + n + '\n'))
-                    .toArray(BaseComponent[]::new)
+                    HoverEvent.Action.SHOW_TEXT,
+                    spectatorNames.stream()
+                            .map(n -> new TextComponent(ChatColor.AQUA + n + '\n'))
+                            .toArray(BaseComponent[]::new)
             );
 
-            spectatorLine = new ComponentBuilder("Spectators (" + spectatorNames.size() + "): ").color(ChatColor.AQUA)
-                .append(firstFourNames).color(ChatColor.GRAY).event(hover)
-                .create();
-        } else {
-            // this is dumb but it lets us make the variable effectively final
-            // (and avoid a working variable)
-            spectatorLine = null;
+            return new ComponentBuilder("Spectators (" + spectatorNames.size() + "): ").color(ChatColor.AQUA)
+                    .append(firstFourNames).color(ChatColor.GRAY).event(hover)
+                    .create();
         }
 
-        createInvMessages(match, invMessages);
-
-        invMessages.forEach((uuid, lines) -> {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player == null) {
-                return;
-            }
-            player.sendMessage(PostMatchInvLang.LINE);
-            player.sendMessage(ChatColor.GOLD + "Post-Match Inventories " + ChatColor.GRAY + "(click name to view)");
-
-            for (Object line : lines) {
-                if (line instanceof TextComponent[]) {
-                    player.spigot().sendMessage((TextComponent[]) line);
-                } else if (line instanceof TextComponent) {
-                    player.spigot().sendMessage((TextComponent) line);
-                } else if (line instanceof String) {
-                    player.sendMessage((String) line);
-                }
-            }
-            if (spectatorLine != null) {
-                player.spigot().sendMessage(spectatorLine);
-            }
-            player.sendMessage(PostMatchInvLang.LINE);
-        });
+        return null; // No spectators
     }
 
     public void createInvMessages(Match match, Map<UUID, Object[]> invMessages) {

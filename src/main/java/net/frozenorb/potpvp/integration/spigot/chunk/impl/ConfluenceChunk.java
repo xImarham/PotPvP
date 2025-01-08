@@ -1,6 +1,6 @@
 package net.frozenorb.potpvp.integration.spigot.chunk.impl;
 
-/*import dev.lugami.spigot.chunk.ChunkSnapshot;
+import cc.fein.confluence.chunksnapshot.ChunkSnapshot;
 import net.frozenorb.potpvp.integration.spigot.chunk.ChunkSnap;
 import org.bukkit.Chunk;
 
@@ -8,8 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
-
-public class KatsuChunk extends ChunkSnap<ChunkSnapshot> {
+public class ConfluenceChunk extends ChunkSnap<ChunkSnapshot> {
 
     @Override
     public ChunkSnapshot takeSnapshot(Chunk chunk) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -22,4 +21,4 @@ public class KatsuChunk extends ChunkSnap<ChunkSnapshot> {
         Method method = chunk.getClass().getDeclaredMethod("restoreSnapshot", ChunkSnapshot.class);
         method.invoke(chunk, chunkSnapshot);
     }
-}*/
+}

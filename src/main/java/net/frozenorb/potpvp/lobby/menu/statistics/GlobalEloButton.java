@@ -26,7 +26,7 @@ public class GlobalEloButton extends Button {
         description.add(CC.translate("&7&m----------------"));
         int counter = 1;
         for (Entry<String, Integer> entry : PotPvPSI.getInstance().getEloHandler().topElo(null).entrySet()) {
-            description.add(CC.translate("&6#" + counter + " &r" + entry.getKey() + " &7- " + "&f" + entry.getValue()));
+            description.add(CC.translate("&b#" + counter + " &r" + entry.getKey() + " &7- " + "&f" + entry.getValue()));
             counter++;
         }
         description.add(CC.translate("&7&m----------------"));

@@ -10,7 +10,6 @@ import net.frozenorb.potpvp.game.arena.Arena;
 import net.frozenorb.potpvp.game.kittype.KitType;
 import net.frozenorb.potpvp.game.match.event.*;
 import net.frozenorb.potpvp.game.postmatchinv.PostMatchPlayer;
-import net.frozenorb.potpvp.integration.lunar.RallyRunnable;
 import net.frozenorb.potpvp.lobby.LobbyHandler;
 import net.frozenorb.potpvp.player.elo.EloCalculator;
 import net.frozenorb.potpvp.util.*;
@@ -67,7 +66,6 @@ public final class Match {
     @Getter
     public boolean allowRematches;
     public EloCalculator.Result eloChange;
-    public int rallyID;
     public final Set<BlockVector> breakedBlocks = new HashSet<>();
     public final Set<BlockVector> placedBlocks = new HashSet<>();
     public final List<Entity> entities = new ArrayList<>();
@@ -181,12 +179,11 @@ public final class Match {
         }
         messageAll(ChatColor.GREEN + "Match started.");
         Bukkit.getPluginManager().callEvent(new MatchStartEvent(this));
-        rallyID = Bukkit.getScheduler().scheduleAsyncRepeatingTask(PotPvPSI.getInstance(), new RallyRunnable(this), 0L, 20L);
 
     }
 
     public void endMatch(MatchEndReason reason) {
-        // prevent duplicate endings
+        // Prevent duplicate endings
         if (state == MatchState.ENDING || state == MatchState.TERMINATED) {
             return;
         }
@@ -194,27 +191,33 @@ public final class Match {
         state = MatchState.ENDING;
         endedAt = new Date();
         endReason = reason;
+
+        // Cancel all scheduled tasks for the match
         this.getRunnables().forEach(id -> PotPvPSI.getInstance().getServer().getScheduler().cancelTask(id));
         try {
+            // Process all teams and their players
             for (MatchTeam matchTeam : this.getTeams()) {
                 for (UUID playerUuid : matchTeam.getAllMembers()) {
                     allPlayers.add(playerUuid);
-                    if (!matchTeam.isAlive(playerUuid))
-                        continue;
                     Player player = Bukkit.getPlayer(playerUuid);
-
-                    postMatchPlayers.computeIfAbsent(playerUuid, v -> new PostMatchPlayer(player, kitType.getHealingMethod(), totalHits.getOrDefault(player.getUniqueId(), 0), longestCombo.getOrDefault(player.getUniqueId(), 0), missedPots.getOrDefault(player.getUniqueId(), 0)));
+                    postMatchPlayers.computeIfAbsent(
+                            playerUuid,
+                            v -> new PostMatchPlayer(
+                                    player,
+                                    kitType.getHealingMethod(),
+                                    totalHits.getOrDefault(player.getUniqueId(), 0),
+                                    longestCombo.getOrDefault(player.getUniqueId(), 0),
+                                    missedPots.getOrDefault(player.getUniqueId(), 0)
+                            )
+                    );
                 }
-                matchTeam.removePoints();
             }
-            messageAll(ChatColor.RED + "Match ended.");
-            Bukkit.getScheduler().cancelTask(rallyID);
-            Bukkit.getPluginManager().callEvent(new MatchEndEvent(this));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
-        int delayTicks = MATCH_END_DELAY_SECONDS * 20;
+            Bukkit.getPluginManager().callEvent(new MatchEndEvent(this));
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle unexpected errors
+        }
+    int delayTicks = MATCH_END_DELAY_SECONDS * 20;
         if (JavaPlugin.getProvidingPlugin(this.getClass()).isEnabled()) {
             Bukkit.getScheduler().runTaskLater(PotPvPSI.getInstance(), this::terminateMatch, delayTicks);
         } else {
@@ -512,7 +515,9 @@ public final class Match {
     public void messageAll(String message) {
         messageAlive(message);
         messageSpectators(message);
+        messageDead(message);
     }
+
 
     /**
      * Plays a sound for all alive participants and spectators
@@ -565,6 +570,23 @@ public final class Match {
     public void messageAlive(String message) {
         for (MatchTeam team : teams) {
             team.messageAlive(message);
+        }
+    }
+    /**
+     * Sends a basic chat message to all dead participants
+     *
+     * @param message the message to send
+     */
+    public void messageDead(String message) {
+        for (MatchTeam matchTeam : this.getTeams()) {
+            for (UUID playerUuid : matchTeam.getAllMembers()) {
+                if (matchTeam.isAlive(playerUuid)) continue; // Skip alive players
+
+                Player player = Bukkit.getPlayer(playerUuid);
+                if (player != null) {
+                    player.sendMessage(message); // Send message to dead player
+                }
+            }
         }
     }
 
